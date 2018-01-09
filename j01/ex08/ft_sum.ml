@@ -3,7 +3,7 @@ let ft_sum f s e =
     nan
   else
     let rec loop f s e acc =
-      if (s = e) then
+      if (s = e + 1) then
         acc
       else
         loop f (s + 1) e (acc +. (f s))
