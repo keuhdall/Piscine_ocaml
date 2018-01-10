@@ -3,26 +3,20 @@ let leibniz_pi max =
     -1
   else
     let ref_pi = (4.0 *. (atan 1.0)) in
-    let rec calc_pi i acc_pi =
-      if (i = ~-1) then
-        (4.0 *. acc_pi)
+    let calc_leibniz h = 4. *. -1. ** (float_of_int h) /. float_of_int (2 * h + 1) in
+    let rec calc_delta i j =
+      if (i -. ref_pi >= 0.) then
+        if (i -. ref_pi <= max) then j
+        else
+          calc_delta (i +. (calc_leibniz (j + 1))) (j + 1)
       else
-        calc_pi (i - 1) (acc_pi +. ((-1. ** (float_of_int i)) /. float_of_int (2 * i + 1)))
+        if (i -. ref_pi >= max) then j
+        else
+          calc_delta (i +. (calc_leibniz (j + 1))) (j + 1)
     in
-    let rec calc_delta j =
-      if ((calc_pi j 0.0) -. ref_pi >= max) then
-        begin
-          print_float (calc_pi j 0.0);
-          print_char '\n';
-          print_float ref_pi;
-          print_char '\n';
-          j
-        end
-      else
-        calc_delta (j + 1)
-    in
-    calc_delta 0
+    calc_delta (calc_leibniz 0) 0
 
 let () =
   print_int (leibniz_pi 0.01);
+  print_int (leibniz_pi 0.001);
   print_char '\n'
