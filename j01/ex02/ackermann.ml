@@ -1,6 +1,6 @@
 let ackermann m n =
   let rec loop m n =
-    if (m = 0) then
+    if (m = 0 && n >= 0) then
       n + 1
     else if (m > 0 && n = 0) then
       loop (m - 1) 1
