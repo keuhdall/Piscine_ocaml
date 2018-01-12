@@ -11,7 +11,6 @@ let () =
                           print_string " ; previous is : " ;
                           print_string (Value.toStringVerbose (Value.previous first)) ;
                           print_char '\n' ;
-                          flush stdout ;
                           print_cards (remaining)
     | []              -> ()
   in
