@@ -182,10 +182,8 @@ let toString t = (Value.toString t.value) ^ (Color.toString t.color)
 let toStringVerbose t = "Card(" ^ (Value.toStringVerbose t.value) ^ ", " ^ (Color.toStringVerbose t.color) ^ ")"
 
 let compare t1 t2 =
-  let val1 = Value.toInt (t1.value) in
-  let val2 = Value.toInt (t2.value) in
-  if (val1 < val2) then ~-1
-  else if (val1 > val2) then 1
+  if (Value.toInt (t1.value) < Value.toInt (t2.value)) then ~-1
+  else if (Value.toInt (t1.value) > Value.toInt (t2.value)) then 1
   else 0
 let max t1 t2 =
   if (Value.toInt t1.value >= Value.toInt t2.value) then t1
