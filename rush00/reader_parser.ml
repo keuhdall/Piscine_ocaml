@@ -29,18 +29,12 @@ let get_case x y =
 
 let get_grid_and_case (x, y) =
   (get_grid x y, get_case x y)
-
-let print_coordonates (x, y) =
-  print_int x;
-  print_char ' ';
-  print_int y;
-  print_char '\n'
   
 let parse grid grid_size =
   let input = read_line () in
   let list_input = (String.split_on_char ' ' input) in
-  if (check_input list_input) = false then print_endline "Error"
+  if (check_input list_input) = false then ((-1), (-1))
   else
     let coordonates = (get_coordonates list_input) in
-    if parse_coordonates coordonates grid_size = false then print_endline "Error"
-    else print_coordonates (get_grid_and_case coordonates)
+    if parse_coordonates coordonates grid_size = false then ((-1), (-1))
+    else get_grid_and_case coordonates

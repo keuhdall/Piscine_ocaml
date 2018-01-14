@@ -8,14 +8,15 @@ let rec get_inner_grid grid n i = match grid with
   | [] -> invalid_arg "WTF"
   | head::tail -> if i = n then head else get_inner_grid tail n (i + 1)
 
-let rec get_nth_case (lst:Grid.cell_state list) n i = match lst with
+let rec get_nth_case (lst:Grid.state list) n i = match lst with
   | [] -> invalid_arg "WTF"
   | head::tail -> if i = n then head else get_inner_grid tail n (i + 1)
 
-let print_case_content (case:Grid.cell_state) = match case with
+let print_case_content (case:Grid.state) = match case with
   | X -> print_char 'X'
   | O -> print_char 'O'
   | Pending -> print_char '_'
+  | Null -> ()
 
 let print_case (grid:Grid.outer_grid) x y =
   let inner_grid = (get_inner_grid grid.outer_content (get_grid x y) 0) in

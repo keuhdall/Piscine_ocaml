@@ -169,7 +169,7 @@ let isCellEmpty (x, y) o_grid =
   if (getInnerGridState o_grid 0 x = Null) then false
   else
     let grid = getInnerGridContent o_grid 0 x in
-    if (getCell grid 0 y <> Pending) then false
+    if ((getCell grid 0 y) <> Pending) then false
     else true
 
 (* Returns the new inner_content of the record inner_grid *)
