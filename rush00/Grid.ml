@@ -32,9 +32,9 @@ let rec checkOneVerticalLine l tmp i j = match l with
   | []  -> tmp
 
 let rec checkAllVerticalLines grid i =
+  let v_line_value = parse_tmp (checkOneVerticalLine grid.inner_content [] 0 i) in
   if (i <= 2) then
-    if (parse_tmp (checkOneVerticalLine grid.inner_content [] 0 i) <> Pending) then
-      parse_tmp (checkOneVerticalLine grid.inner_content [] 0 i)
+    if (v_line_value <> Pending) then v_line_value
     else checkAllVerticalLines grid (i + 1)
   else Pending
 
@@ -46,8 +46,8 @@ let rec checkOneHorizontalLine l tmp i j = match l with
 
 let rec checkAllHorizontalLines grid i =
   if (i <= 2) then
-    if (parse_tmp (checkOneHorizontalLine grid.inner_content [] 0 i) <> Pending) then
-      parse_tmp (checkOneHorizontalLine grid.inner_content [] 0 i)
+    let h_line_value = parse_tmp (checkOneHorizontalLine grid.inner_content [] 0 i) in
+    if (h_line_value <> Pending) then h_line_value
     else checkAllHorizontalLines grid (i + 1)
   else Pending
 
@@ -63,10 +63,10 @@ let rec checkSecondDiagonal l tmp i = match l with
   | []  -> tmp
 
 let checkDiagonals grid =
-  if (parse_tmp (checkFirstDiagonal grid.inner_content [] 0) <> Pending) then
-    parse_tmp (checkFirstDiagonal grid.inner_content [] 0)
-  else if (parse_tmp (checkSecondDiagonal grid.inner_content [] 0) <> Pending) then
-    parse_tmp (checkSecondDiagonal grid.inner_content [] 0)
+  let first_diag_val = parse_tmp (checkFirstDiagonal grid.inner_content [] 0) in
+  let second_diag_val = parse_tmp (checkSecondDiagonal grid.inner_content [] 0) in
+  if (first_diag_val <> Pending) then first_diag_val
+  else if (second_diag_val <> Pending) then second_diag_val
   else Pending
 
 let rec getInnerGrid l i j = match l with
