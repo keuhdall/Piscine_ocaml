@@ -166,7 +166,7 @@ let rec getCell l i j = match l with
   | _ -> getCell l (i + 1) j
 
 let isCellEmpty (x, y) o_grid =
-  if (getInnerGridState o_grid 0 x = Null) then false
+  if (getInnerGridState o_grid 0 x <> Pending) then false
   else
     let grid = getInnerGridContent o_grid 0 x in
     if ((getCell grid 0 y) <> Pending) then false
