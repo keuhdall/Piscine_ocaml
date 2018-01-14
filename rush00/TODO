@@ -1,0 +1,5 @@
+TODO :
+[ ] Function to display grid
+[ ] Function to compute a move and return a new grid (with the move done)
+[ ] The main loop (first it checks if the grid is won) then get a move with parse function
+if the the move is valid, call the loop back (tail recursion) with the new grid, check it, and go again...
