@@ -191,7 +191,8 @@ let rec updatedInnerGridContent (lst:state list) (x, y) (sign:state) (ret:state 
                               else updatedInnerGridContent tail (x, y) sign (head::ret) (i + 1)
 
 let getUpdatedInner grid (x, y) (sign:state) =
-  newInnerGrid (updatedInnerGridContent grid.inner_content (x, y) sign [] 0) grid.inner_state
+  let new_grid  = newInnerGrid (updatedInnerGridContent grid.inner_content (x, y) sign [] 0) grid.inner_state in
+  newInnerGrid new_grid.inner_content (in_isGridWon new_grid)
 
 let rec updatedOuterGridContent (lst:inner_grid list) (x, y) (sign:state) (ret:inner_grid list) i = match lst with
   | [] -> List.rev ret
@@ -199,4 +200,5 @@ let rec updatedOuterGridContent (lst:inner_grid list) (x, y) (sign:state) (ret:i
                               else updatedOuterGridContent tail (x, y) sign (head::ret) (i + 1)
 
 let updateOuterGrid o_grid (x, y) sign =
-  newOuterGrid (updatedOuterGridContent o_grid.outer_content (x, y) sign [] 0) o_grid.outer_state
+  let new_grid = newOuterGrid (updatedOuterGridContent o_grid.outer_content (x, y) sign [] 0) o_grid.outer_state in
+  newOuterGrid new_grid.outer_content (out_isGridWon new_grid)
