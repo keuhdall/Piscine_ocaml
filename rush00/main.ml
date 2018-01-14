@@ -12,7 +12,7 @@ let blank_outer_grid = Grid.newOuterGrid [inner_grid0;inner_grid1;inner_grid2;in
 *)
 let grid_size = 9
 
-let isGameOver (grid:Grid.outer_grid) = grid.outer_state <> Grid.Pending
+let isGameOver (grid:Grid.outer_grid) = grid.outer_state <> Grid.Pending || Grid.isGridCompleted grid.outer_content = Grid.Null
  
 
 let announcePlayer p = match p with
