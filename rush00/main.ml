@@ -25,7 +25,7 @@ let is_valid tuple = match tuple with
   | (_, _) -> true
 
 let is_legal tuple (grid:Grid.outer_grid) =
-  if (Grid.isCellEmpty tuple grid.outer_content = true) then true
+  if (Grid.isCellEmpty tuple grid = true) then true
     else begin print_endline "Illegal move." ; false end
 
 let rec getMove (grid:Grid.outer_grid) =

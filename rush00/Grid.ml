@@ -165,12 +165,31 @@ let rec getCell l i j = match l with
   | first::remaining when i = j -> first
   | _ -> getCell l (i + 1) j
 
-let isCellEmpty (x, y) o_grid =
+  let rec get_inner_grid (lst:inner_grid list) n i = match lst with
+  | [] -> invalid_arg "WTF"
+  | head::tail -> if i = n then head else get_inner_grid tail n (i + 1)
+
+  let rec get_nth_case (lst:state list) n i = match lst with
+  | [] -> invalid_arg "WTF"
+  | head::tail -> if i = n then head else get_nth_case tail n (i + 1)
+
+  let case_state_content (case:state) = match case with
+  | X -> false
+  | O -> false
+  | Pending -> true
+  | Null -> true
+
+  let isCellEmpty (x, y) o_grid =
+    let i_grid = (get_inner_grid o_grid.outer_content x 0) in
+    let case = get_nth_case i_grid.inner_content y 0 in
+    case_state_content case
+
+(*let isCellEmpty (x, y) o_grid =
   if (getInnerGridState o_grid 0 x <> Pending) then false
   else
     let grid = getInnerGridContent o_grid 0 x in
     if ((getCell grid 0 y) <> Pending) then false
-    else true
+    else true*)
 
 (* Returns the new inner_content of the record inner_grid *)
 let rec getNewInnerGridContent l tmp i j sign = match l with
