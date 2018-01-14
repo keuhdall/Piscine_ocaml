@@ -1,14 +1,13 @@
-type cell_state = X | O | Pending
-type grid_state = X | O | Pending | Null
+type state = X | O | Pending | Null
 
 type inner_grid = {
-  inner_content : cell_state list ;
-  inner_state : grid_state
+  inner_content : state list ;
+  inner_state : state
 }
 
 type outer_grid = {
   outer_content : inner_grid list ;
-  outer_state : grid_state
+  outer_state : state
 }
 
 let newInnerGrid newContent newState = {
@@ -21,7 +20,17 @@ let newOuterGrid newContent newState = {
   outer_state = newState
 }
 
-let rec parse_tmp (l:cell_state list) = match l with
+let rec initOuterGridContent l i =
+  if (i <= 8) then
+    ((newInnerGrid [Pending; Pending; Pending; Pending; Pending; Pending; Pending; Pending; Pending] Pending)::l)
+    initOuterGridContent l (i + 1)
+  else
+    l
+
+let initOuterGrid () =
+  newOuterGrid (initOuterGridContent [] 0) Pending
+
+let rec parse_tmp (l:state list) = match l with
   | first::second::third::[] when (first = second) && (second = third) -> first
   | _ -> Pending
 
@@ -68,6 +77,12 @@ let checkDiagonals grid =
   if (first_diag_val <> Pending) then first_diag_val
   else if (second_diag_val <> Pending) then second_diag_val
   else Pending
+(* ---------- *)
+
+let rec isGridCompleted (l:state list) = match l with
+  | first::remaining when first = Pending -> Pending
+  | first::remaining                      -> isGridCompleted remaining
+  | []  -> Null
 
 let isGridWon grid =
   let h_lines_val = checkAllHorizontalLines grid 0 in
@@ -78,9 +93,9 @@ let isGridWon grid =
   else if (d_lines_val <> Pending) then d_lines_val
   else Pending
 
-let rec getInnerGrid l i j = match l with
+let rec getInnerGridContent l i j = match l with
   | first::remaining when i = j -> first.inner_content
-  | _ -> getInnerGrid l (i + 1) j
+  | _ -> getInnerGridContent l (i + 1) j
 
 let rec getInnerGridState l i j = match l with
   | first::remaining when i = j -> first.inner_state
@@ -93,6 +108,33 @@ let rec getCell l i j = match l with
 let isCellEmpty (x, y) o_grid =
   if (getInnerGridState o_grid 0 x = Null) then false
   else
-    let grid = getInnerGrid o_grid 0 x in
+    let grid = getInnerGridContent o_grid 0 x in
     if (getCell grid 0 y <> Pending) then false
     else true
+
+(* Returns the new inner_content of the record inner_grid *)
+let rec getNewInnerGridContent l tmp i j sign = match l with
+  | first::remaining when i = j   -> getNewInnerGridContent remaining (sign::tmp) (i + 1) j sign
+  | first::remaining              -> getNewInnerGridContent remaining (first::tmp) (i + 1) j sign
+  | []                            -> List.rev tmp
+
+let getNewInnerGridState grid =
+  let isWon = isGridWon grid in
+  if (isWon <> Pending) then isWon
+  else isGridCompleted grid.inner_content
+
+let updateInnerGrid grid i sign =
+  let newGridIteration = getNewInnerGridContent grid.inner_content [] 0 i sign in
+  let newGridState = getNewInnerGridState (newInnerGrid newGridIteration grid.inner_state) in
+  newInnerGrid newGridIteration newGridState
+
+let rec parseOuterGridContent l tmp i j newGrid = match l with
+  | first::remaining when i = j   -> parseOuterGridContent remaining (newGrid::tmp) (i + 1) j newGrid
+  | first::remaining              -> parseOuterGridContent remaining (first::tmp) (i + 1) j newGrid
+  | [] -> tmp
+
+let updateOuterGrid o_grid (x, y) sign =
+  parseOuterGridContent o_grid [] 0 x (updateInnerGrid (newInnerGrid (getInnerGridContent o_grid 0 x) (getInnerGridState o_grid 0 x)) y sign)
+
+
+  
