@@ -69,6 +69,15 @@ let checkDiagonals grid =
   else if (second_diag_val <> Pending) then second_diag_val
   else Pending
 
+let isGridWon grid =
+  let h_lines_val = checkAllHorizontalLines grid 0 in
+  let v_lines_val = checkAllVerticalLines grid 0 in
+  let d_lines_val = checkDiagonals grid in
+  if (h_lines_val <> Pending) then h_lines_val
+  else if (v_lines_val <> Pending) then v_lines_val
+  else if (d_lines_val <> Pending) then d_lines_val
+  else Pending
+
 let rec getInnerGrid l i j = match l with
   | first::remaining when i = j -> first.inner_content
   | _ -> getInnerGrid l (i + 1) j
@@ -87,4 +96,3 @@ let isCellEmpty (x, y) o_grid =
     let grid = getInnerGrid o_grid 0 x in
     if (getCell grid 0 y <> Pending) then false
     else true
-
