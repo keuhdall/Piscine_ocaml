@@ -182,36 +182,21 @@ let rec getCell l i j = match l with
   let isCellEmpty (x, y) o_grid =
     let i_grid = (get_inner_grid o_grid.outer_content x 0) in
     let case = get_nth_case i_grid.inner_content y 0 in
-    case_state_content case
+    if (i_grid.inner_state <> Pending) then false
+    else case_state_content case
 
-(*let isCellEmpty (x, y) o_grid =
-  if (getInnerGridState o_grid 0 x <> Pending) then false
-  else
-    let grid = getInnerGridContent o_grid 0 x in
-    if ((getCell grid 0 y) <> Pending) then false
-    else true*)
+let rec updatedInnerGridContent (lst:state list) (x, y) (sign:state) (ret:state list) i = match lst with
+  | [] -> List.rev ret
+  | head::tail -> if (i = y)  then updatedInnerGridContent tail (x, y) sign ([sign]@ret) (i + 1)
+                              else updatedInnerGridContent tail (x, y) sign (head::ret) (i + 1)
 
-(* Returns the new inner_content of the record inner_grid *)
-let rec getNewInnerGridContent l tmp i j sign = match l with
-  | first::remaining when i = j   -> getNewInnerGridContent remaining (sign::tmp) (i + 1) j sign
-  | first::remaining              -> getNewInnerGridContent remaining (first::tmp) (i + 1) j sign
-  | []                            -> List.rev tmp
+let getUpdatedInner grid (x, y) (sign:state) =
+  newInnerGrid (updatedInnerGridContent grid.inner_content (x, y) sign [] 0) grid.inner_state
 
-let getNewInnerGridState grid =
-  let isWon = in_isGridWon grid in
-  if (isWon <> Pending) then isWon
-  else in_isGridCompleted grid.inner_content
-
-let updateInnerGrid grid i sign =
-  let newGridIteration = getNewInnerGridContent grid.inner_content [] 0 i sign in
-  let newGridState = getNewInnerGridState (newInnerGrid newGridIteration grid.inner_state) in
-  newInnerGrid newGridIteration newGridState
-
-let rec parseOuterGridContent l tmp i j newGrid = match l with
-  | first::remaining when i = j   -> parseOuterGridContent remaining (newGrid::tmp) (i + 1) j newGrid
-  | first::remaining              -> parseOuterGridContent remaining (first::tmp) (i + 1) j newGrid
-  | [] -> List.rev tmp
+let rec updatedOuterGridContent (lst:inner_grid list) (x, y) (sign:state) (ret:inner_grid list) i = match lst with
+  | [] -> List.rev ret
+  | head::tail -> if (i = x)  then updatedOuterGridContent tail (x, y) sign ([(getUpdatedInner head (x, y) sign)]@ret) (i + 1)
+                              else updatedOuterGridContent tail (x, y) sign (head::ret) (i + 1)
 
 let updateOuterGrid o_grid (x, y) sign =
-  let updatedContent = parseOuterGridContent o_grid.outer_content [] 0 x (updateInnerGrid (newInnerGrid (getInnerGridContent o_grid.outer_content 0 x) (getInnerGridState o_grid.outer_content 0 x)) y sign) in
-  newOuterGrid updatedContent (out_isGridWon o_grid)
+  newOuterGrid (updatedOuterGridContent o_grid.outer_content (x, y) sign [] 0) o_grid.outer_state
