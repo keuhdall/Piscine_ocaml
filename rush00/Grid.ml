@@ -130,9 +130,9 @@ let out_checkDiagonals grid =
   else Pending
 (* ---------- *)
 
-let rec in_isGridCompleted (l:state list) = match l with
-  | first::remaining when first = Pending -> Pending
-  | first::remaining                      -> in_isGridCompleted remaining
+let rec isGridCompleted (l:inner_grid list) = match l with
+  | first::remaining when first.inner_state = Pending -> Pending
+  | first::remaining                      -> isGridCompleted remaining
   | []  -> Null
 
 let in_isGridWon grid =
