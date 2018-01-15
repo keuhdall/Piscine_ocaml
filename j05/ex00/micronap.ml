@@ -7,7 +7,7 @@ let () =
       for i = 1 to int_of_string argv.(1) do
         my_sleep ()
       done
-      with
-        | Invalid_argument err  -> print_endline "Please provide at least one argument"
-        | Failure err           -> print_endline "Please provide an integer as parameter"
-    end
+    with
+      | Invalid_argument err  -> print_endline "Please provide at least one argument"
+      | Failure err           -> print_endline "Please provide an integer as parameter"
+  end
