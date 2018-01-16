@@ -41,7 +41,7 @@ let extract_elem l = match l with
 let example_of_file name =
   Random.self_init () ;
   let numLines = count_lines name in
-  let lineContent_tmp = get_example_line name (Random.int numLines) in
+  let lineContent_tmp = try get_example_line name (Random.int numLines) with Invalid_argument err -> print_endline "invalid file" ; exit 1 in
   let lastElem = List.hd (List.rev lineContent_tmp) in
   let lineContent_str = List.rev (slice_first (List.rev lineContent_tmp)) in
   let lineContent_float = List.map float_of_string lineContent_str in
