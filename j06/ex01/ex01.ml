@@ -8,10 +8,10 @@ module StringHash =
       let rec doHash i acc =
         let len = String.length s in
         if (i < len) then
-          doHash (i + 1) (acc + (int_of_char s.[i] + 42))
+          doHash (i + 1) ((acc lsl 5) + acc + (int_of_char s.[i]))
         else acc
         in
-        doHash 0 0
+        doHash 0 5381
   end
 
 module StringHashtbl = Hashtbl.Make (StringHash)
