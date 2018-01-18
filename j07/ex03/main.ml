@@ -9,9 +9,9 @@ let () =
   let dalek1 = new Dalek.dalek in
   let dalek2 = new Dalek.dalek in
   let dalek3 = new Dalek.dalek in
-  let doc_list = [doc1 ; doc2 ; doc3] in
-  let sk_list = [sk1 ; sk2 ; sk3] in
-  let dalek_list = [dalek1 ; dalek2 ; dalek3] in
+  let doc_list = [doc1 ; doc2] in
+  let sk_list = [sk1 ; sk2] in
+  let dalek_list = [dalek1 ; dalek2] in
   let doc_army = new Army.army doc_list in
   let sk_army = new Army.army sk_list in
   let dalek_army = new Army.army dalek_list in
@@ -20,14 +20,25 @@ let () =
     | []      -> ()
   in
   print_army doc_army#getList ;
-  print_endline "============================" ;
+  print_endline "----------------------------" ;
   print_army sk_army#getList ;
-  print_endline "============================" ;
+  print_endline "----------------------------" ;
   print_army dalek_army#getList ;
   print_endline "============================" ;
-  dalek_army#add (new Dalek.dalek) ;
+  doc_army#add doc3 ;
+  sk_army#add sk3 ;
+  dalek_army#add dalek3 ;
+  print_army doc_army#getList ;
+  print_endline "----------------------------" ;
+  print_army sk_army#getList ;
+  print_endline "----------------------------" ;
   print_army dalek_army#getList ;
   print_endline "============================" ;
-  dalek_army#delete () ;
-  dalek_army#delete () ;
-  print_army dalek_army#getList ;
+  doc_army#delete () ; doc_army#delete () ;
+  sk_army#delete () ; sk_army#delete () ;
+  dalek_army#delete () ; dalek_army#delete () ;
+  print_army doc_army#getList ;
+  print_endline "----------------------------" ;
+  print_army sk_army#getList ;
+  print_endline "----------------------------" ;
+  print_army dalek_army#getList
