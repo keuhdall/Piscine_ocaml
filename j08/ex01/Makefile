@@ -1,5 +1,5 @@
 RESULT = test
-SOURCES = atom.ml main.ml
+SOURCES = atom.ml molecule.ml main.ml
 LIBS = 
 OCAMLMAKEFILE = OCamlMakefile
 include $(OCAMLMAKEFILE)
