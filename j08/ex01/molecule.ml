@@ -7,7 +7,7 @@ class virtual molecule (name:string) (atoms:Atom.atom list) =
     method private compare_atoms (a: Atom.atom) (b: Atom.atom) =
       String.compare a#symbol b#symbol
 
-    method private hill_notation atoms =
+      method private hill_notation atoms =
       let rec find_atom atoms nb (to_find: string) = match atoms with
         | [] -> ""
         | head::next::tail ->
@@ -18,19 +18,25 @@ class virtual molecule (name:string) (atoms:Atom.atom list) =
               else to_find ^ (string_of_int (nb + 1))
             end
           else find_atom (next::tail) nb to_find
-        | head::[] -> ""
+        | head::[] ->
+            if (head#symbol = to_find) then
+              begin
+                if (nb = 0) then to_find
+                else to_find ^ (string_of_int (nb + 1))
+              end
+            else ""
       in
       let rec tail_hill atoms nb find_h ret = match atoms with
-        | [] -> ret
-        | head::next::tail ->
-                if (head#symbol = "C" || (find_h = false && head#symbol = "H")) then tail_hill (next::tail) nb find_h ret
-                else if (head#equals next) then tail_hill (next::tail) (nb + 1) find_h ret
-                else if (nb = 0) then tail_hill (next::tail) 0 find_h (ret ^ head#symbol)
-                else tail_hill (next::tail) 0 find_h (ret ^ head#symbol ^ (string_of_int (nb + 1)))
-        | head::[] ->
-                if (head#symbol = "C" || (find_h = false && head#symbol = "H")) then ret
-                else if (nb = 0) then ret ^ head#symbol
-                else ret ^ head#symbol ^ (string_of_int (nb + 1))
+      | [] -> ret
+      | head::next::tail ->
+              if (head#symbol = "C" || (find_h = false && head#symbol = "H")) then tail_hill (next::tail) nb find_h ret
+              else if (head#equals next) then tail_hill (next::tail) (nb + 1) find_h ret
+              else if (nb = 0) then tail_hill (next::tail) 0 find_h (ret ^ head#symbol)
+              else tail_hill (next::tail) 0 find_h (ret ^ head#symbol ^ (string_of_int (nb + 1)))
+      | head::[] ->
+              if (head#symbol = "C" || (find_h = false && head#symbol = "H")) then ret
+              else if (nb = 0) then ret ^ head#symbol
+              else ret ^ head#symbol ^ (string_of_int (nb + 1))
       in
       let carbon = find_atom atoms 0 "C" in
       if carbon = "" then (tail_hill atoms 0 true "")
