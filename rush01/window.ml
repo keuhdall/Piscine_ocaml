@@ -89,6 +89,18 @@ class window win new_tama =
         | Ok () ->
         match Tsdl.Sdl.render_copy renderer (self#get_image "save") ~dst:(Tsdl.Sdl.Rect.create 700 400 50 50) with
         | Error (`Msg e)  -> failwith (Printf.sprintf "Window.window.render_image : failed to render image (%s)" e)
+        | Ok () ->
+        match Tsdl.Sdl.render_copy renderer (self#get_image "health") ~dst:(Tsdl.Sdl.Rect.create 38 68 154 44) with
+        | Error (`Msg e)  -> failwith (Printf.sprintf "Window.window.render_image : failed to render image (%s)" e)
+        | Ok () ->
+        match Tsdl.Sdl.render_copy renderer (self#get_image "energy") ~dst:(Tsdl.Sdl.Rect.create 228 68 154 44) with
+        | Error (`Msg e)  -> failwith (Printf.sprintf "Window.window.render_image : failed to render image (%s)" e)
+        | Ok () ->
+        match Tsdl.Sdl.render_copy renderer (self#get_image "hygiene") ~dst:(Tsdl.Sdl.Rect.create 418 68 154 44) with
+        | Error (`Msg e)  -> failwith (Printf.sprintf "Window.window.render_image : failed to render image (%s)" e)
+        | Ok () ->
+        match Tsdl.Sdl.render_copy renderer (self#get_image "happyness") ~dst:(Tsdl.Sdl.Rect.create 608 68 154 44) with
+        | Error (`Msg e)  -> failwith (Printf.sprintf "Window.window.render_image : failed to render image (%s)" e)
         | Ok () -> ()
       
 
